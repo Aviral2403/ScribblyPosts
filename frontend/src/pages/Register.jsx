@@ -16,7 +16,7 @@ const Register = () => {
     uppercase: false,
     lowercase: false,
     number: false,
-    specialChar: false
+    specialChar: false,
   });
   const navigate = useNavigate();
 
@@ -27,14 +27,14 @@ const Register = () => {
       uppercase: /[A-Z]/.test(password),
       lowercase: /[a-z]/.test(password),
       number: /[0-9]/.test(password),
-      specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+      specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
     });
   }, [password]);
 
   const handleRegister = async () => {
     // Validate all criteria before submission
     const allCriteriaMet = Object.values(passwordCriteria).every(Boolean);
-    
+
     if (!allCriteriaMet) {
       setError("Please meet all password requirements");
       return;
@@ -62,24 +62,27 @@ const Register = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Navigation Bar */}
-      <nav className="bg-gradient-to-r from-gray-900 to-gray-800 shadow-lg">
+      <nav className="bg-gray-900 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <Link to="/" className="flex items-center">
-              <h1 className="text-2xl font-bold text-white tracking-tight hover:text-gray-200 transition">
-                ScribblyPosts
-              </h1>
-            </Link>
+            <div className="flex flex-row gap-2">
+              <Link to="/" className="flex items-center">
+                <img src="/NavLogo.png" alt="Logo" width={50} height={60} />
+                <h1 className="font-cursive text-shadow-lg text-xl md:text-2xl font-bold text-white tracking-tight hover:text-gray-200 transition">
+                  ScribblyPosts
+                </h1>
+              </Link>
+            </div>
             <div className="flex items-center space-x-6">
               <Link
                 to="/login"
-                className="text-gray-300 hover:text-white transition font-medium"
+                className="text-gray-300 hover:text-white transition font-medium text-sm md:text-md"
               >
                 Login
               </Link>
               <Link
                 to="/about"
-                className="text-gray-300 hover:text-white transition font-medium"
+                className="text-gray-300 hover:text-white transition font-medium font-medium text-sm md:text-md"
               >
                 About
               </Link>
@@ -165,23 +168,56 @@ const Register = () => {
                   className="w-full px-4 py-3 rounded-lg transition duration-200 outline-none border-blue-300 focus:border-blue-600 bg-blue-100 border-2"
                   placeholder="Create a password"
                 />
-                
+
                 {/* Password Criteria */}
                 <div className="mt-2 text-sm space-y-1">
-                  <div className={`flex items-center ${passwordCriteria.length ? 'text-green-600' : 'text-red-600'}`}>
-                    {passwordCriteria.length ? '✓' : '✗'} At least 8 characters
+                  <div
+                    className={`flex items-center ${
+                      passwordCriteria.length
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {passwordCriteria.length ? "✓" : "✗"} At least 8 characters
                   </div>
-                  <div className={`flex items-center ${passwordCriteria.uppercase ? 'text-green-600' : 'text-red-600'}`}>
-                    {passwordCriteria.uppercase ? '✓' : '✗'} One uppercase letter
+                  <div
+                    className={`flex items-center ${
+                      passwordCriteria.uppercase
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {passwordCriteria.uppercase ? "✓" : "✗"} One uppercase
+                    letter
                   </div>
-                  <div className={`flex items-center ${passwordCriteria.lowercase ? 'text-green-600' : 'text-red-600'}`}>
-                    {passwordCriteria.lowercase ? '✓' : '✗'} One lowercase letter
+                  <div
+                    className={`flex items-center ${
+                      passwordCriteria.lowercase
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {passwordCriteria.lowercase ? "✓" : "✗"} One lowercase
+                    letter
                   </div>
-                  <div className={`flex items-center ${passwordCriteria.number ? 'text-green-600' : 'text-red-600'}`}>
-                    {passwordCriteria.number ? '✓' : '✗'} One number
+                  <div
+                    className={`flex items-center ${
+                      passwordCriteria.number
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {passwordCriteria.number ? "✓" : "✗"} One number
                   </div>
-                  <div className={`flex items-center ${passwordCriteria.specialChar ? 'text-green-600' : 'text-red-600'}`}>
-                    {passwordCriteria.specialChar ? '✓' : '✗'} One special character
+                  <div
+                    className={`flex items-center ${
+                      passwordCriteria.specialChar
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {passwordCriteria.specialChar ? "✓" : "✗"} One special
+                    character
                   </div>
                 </div>
               </div>

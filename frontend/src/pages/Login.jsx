@@ -39,19 +39,21 @@ const Login = () => {
     <div className="min-h-screen flex flex-col">
       {/* Navigation bar */}
       <div className="flex items-center justify-between px-6 md:px-[200px] py-4 bg-gray-900">
-        <div>
-          <h1 className="text-lg md:text-xl font-extrabold text-gray-100">
-            <Link to="/">ScribblyPosts</Link>
+        <div className="flex flex-row gap-2">
+          <img src="/NavLogo.png" alt="Logo" width={50} height={60} />
+
+          <h1 className=" flex justify-center items-center text-md md:text-lg font-cursive text-shadow-lg text-gray-100 cursor-pointer font-semibold">
+            ScribblyPosts
           </h1>
         </div>
         <div className="flex justify-between md:gap-4 gap-2">
           <h3>
-            <Link to="/about" className="text-gray-100">
+            <Link to="/about" className="text-gray-100 text-sm md:text-md">
               About
             </Link>
           </h3>
           <h3>
-            <Link to="/register" className="text-gray-100">
+            <Link to="/register" className="text-gray-100 text-sm md:text-md">
               Register
             </Link>
           </h3>
@@ -69,14 +71,14 @@ const Login = () => {
       >
         {/* Overlay for better readability */}
         <div className="absolute inset-0 bg-black/40"></div>
-        
+
         {/* Login Card */}
         <div className="relative z-10 bg-white p-8 rounded-xl shadow-2xl w-[80%] md:w-[45%] max-w-md">
           <div className="flex flex-col justify-center items-center space-y-6">
             <h1 className="text-2xl font-bold text-gray-800">
               Log in to your account
             </h1>
-            
+
             {/* Error Message */}
             {error && (
               <div className="w-full bg-red-50 text-red-600 py-3 px-4 rounded-lg text-center">

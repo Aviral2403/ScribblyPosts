@@ -250,7 +250,7 @@ const PostDetails = () => {
                   </p>
                 </div>
               </div>
-              <div className="mt-4 md:mt-8 max-w-none text-justify">
+              <div className="mt-4 md:mt-8 max-w-none">
                 <div
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(post.desc),
