@@ -10,14 +10,14 @@ const ProfilePosts = ({ p, navigateToPost }) => {
       onClick={() => navigateToPost(p._id)}
     >
       {p.photo && (
-        <div className="w-full lg:w-[35%] h-[200px] flex justify-center items-center">
-          <img
-            src={p.photo || placeholderImage}
-            alt=""
-            className="h-full w-full object-cover"
-            loading="lazy"
-          />
-        </div>
+        <div className="w-full lg:w-[35%] h-[200px] flex justify-center items-center overflow-hidden group">
+        <img
+          src={p.photo || placeholderImage}
+          alt=""
+          className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300 ease-in-out"
+          loading="lazy"
+        />
+      </div>
       )}
       <div className="flex flex-col w-full lg:w-[65%] space-y-2">
         <h1 className="text-xl font-bold mb-1 md:text-2xl">{p.title}</h1>

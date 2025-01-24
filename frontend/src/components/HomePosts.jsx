@@ -13,13 +13,15 @@ const HomePosts = ({ post }) => {
 
   return (
     <div className="w-full flex flex-col lg:flex-row gap-3 mt-16 space-y-6 lg:space-y-6">
-      <div className="w-full lg:w-[35%] h-[250px] sm:h-[320px] lg:h-[220px] flex justify-center items-center">
-        <img
-          src={post.photo || placeholderImage}
-          alt=""
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
+      <div className="w-full lg:w-[35%] h-[250px] sm:h-[320px] lg:h-[220px] flex justify-center items-center group-hover:scale-110">
+        <div className="group h-full w-full overflow-hidden">
+          <img
+            src={post.photo || placeholderImage}
+            alt=""
+            className="h-full w-full object-cover transform transition-transform duration-300 group-hover:scale-110"
+            loading="lazy"
+          />
+        </div>
       </div>
       <div className="w-full lg:w-[65%] flex flex-col">
         <h1 className="text-xl font-bold mb-1 lg:mb-2">{post.title}</h1>

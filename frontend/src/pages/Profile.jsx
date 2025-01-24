@@ -193,7 +193,7 @@ const Profile = () => {
             </div>
 
             {/* Saved Posts Section */}
-            <div className="w-full max-w-2xl lg:max-w-5xl mt-4">
+            <div className="w-full max-w-2xl lg:max-w-5xl mt-2">
               <h1 className="text-2xl font-bold mb-4 text-center">
                 Posts Saved by You!
               </h1>
@@ -207,7 +207,7 @@ const Profile = () => {
                         navigateToPost={navigateToPost}
                       />
                     ))}
-                    <div className="text-center text-gray-700 mt-8 py-4 font-semibold italic text-xl">
+                    <div className="text-center text-gray-700 mt-4 py-4 font-semibold italic text-xl">
                       No More Saved Posts To Display!
                     </div>
                   </>
@@ -216,12 +216,6 @@ const Profile = () => {
                     <div className="text-center text-gray-700 font-semibold italic text-xl">
                       No saved posts yet!
                     </div>
-                    <img
-                      src="/noPosts.png"
-                      alt=""
-                      className="w-48 h-48 md:w-64 md:h-64"
-                      loading="lazy"
-                    />
                     <div>
                       <p className="text-center text-gray-700 md:text-xl text-md">
                         Oops! It looks like your saved posts are playing hide
@@ -230,6 +224,13 @@ const Profile = () => {
                         reference!
                       </p>
                     </div>
+                    <img
+                      src="/noPosts.png"
+                      alt=""
+                      className="w-48 h-48 md:w-64 md:h-64"
+                      loading="lazy"
+                    />
+                    
                   </div>
                 )}
               </div>
