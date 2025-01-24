@@ -98,50 +98,63 @@ router.post("/login", async (req, res) => {
             return res.status(400).json({ error: "Email and password are required" });
         }
 
-        // Normalize email with fallback for existing users
+        // Normalize email
         const normalizedEmail = validator.normalizeEmail(email, {
             all_lowercase: true,
             gmail_remove_dots: true
         })
 
-        // Try normalized email first
-        let user = await User.findOne({ email: normalizedEmail })
-
-        // If no user found, try original email
-        if (!user) {
-            user = await User.findOne({ email: email })
-        }
+        // Find user
+        const user = await User.findOne({ 
+            $or: [
+                { email: normalizedEmail },
+                { email: email }
+            ]
+        })
 
         if (!user) {
             return res.status(404).json({ error: "User not found" })
         }
 
+        // Verify password
         const match = await bcrypt.compare(password, user.password)
         if (!match) {
             return res.status(401).json({ error: "Invalid credentials" })
         }
 
-        // Update user's email to normalized version if different
-        if (user.email !== normalizedEmail) {
-            user.email = normalizedEmail
-            await user.save()
-        }
-
+        // Generate token with longer expiration
         const token = jwt.sign(
-            { id: user.id, username: user.username, email: user.email }, 
+            { 
+                id: user._id, 
+                username: user.username, 
+                email: user.email 
+            }, 
             process.env.SECRET, 
-            { expiresIn: "3d" }
+            { expiresIn: "7d" } // Extended token validity
         )
-        const { password: userPassword, ...info } = user._doc
-        res.cookie("token", token).status(200).json({
-            user: info,
+
+        // Remove password from user object
+        const { password: userPassword, ...userInfo } = user._doc
+
+        // Send token in multiple ways
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        })
+
+        res.status(200).json({
+            user: userInfo,
             token: token
         })
     }
     catch (err) {
+        console.error("Login error:", err)
         res.status(500).json({ error: "Server error during login" })
     }
 })
+
 
 // LOGOUT
 router.get("/logout", async (req, res) => {
@@ -153,16 +166,66 @@ router.get("/logout", async (req, res) => {
     }
 })
 
-// REFETCH USER
-router.get("/refetch", (req, res) => {
-    const params = req.query
-    const token = params.token
-    jwt.verify(token, process.env.SECRET, {}, async (err, data) => {
-        if (err) {
-            return res.status(404).json(err)
-        }
-        res.status(200).json(data)
-    })
-})
+
+
+
+router.get("/refetch", async (req, res) => {
+    const token = req.query.token;
+    
+    // Log incoming request for debugging
+    console.log("Refetch request received with token:", token);
+    
+    // Check if token exists
+    if (!token) {
+      console.warn("No token provided in refetch request");
+      return res.status(401).json({ error: "No token provided" });
+    }
+    
+    try {
+      // Verify token
+      const decoded = jwt.verify(token, process.env.SECRET);
+      console.log("Decoded token:", decoded);
+      
+      // Fetch user, excluding password
+      const user = await User.findById(decoded.id).select('-password');
+      
+      if (!user) {
+        console.warn(`User not found for ID: ${decoded.id}`);
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      // Construct a clean user object
+      const userResponse = {
+        id: user._id,
+        username: user.username,
+        email: user.email
+      }
+      
+      // Log successful user retrieval
+    //   console.log(`User retrieved successfully: ${user.username}`);
+      
+      // Return user info
+      res.status(200).json(userResponse);
+    } catch (err) {
+      // Detailed error logging
+      console.error("Refetch error details:", {
+        name: err.name,
+        message: err.message,
+        stack: err.stack
+      });
+  
+      // Handle specific token verification errors
+      if (err.name === 'JsonWebTokenError') {
+        return res.status(401).json({ error: "Invalid token" });
+      }
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: "Token expired" });
+      }
+      
+      // Generic server error
+      res.status(500).json({ error: "Server error during user refetch" });
+    }
+  });
+
 
 module.exports = router
